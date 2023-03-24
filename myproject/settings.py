@@ -24,10 +24,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'iw+b1%p9&zw_+#gx+m&aw$gza2-_p6$03s3&4p+4kbd8%o0b_8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['.us-west-2.elasticbeanstalk.com']
-
+if 'PYTHONPATH' in os.environ:
+    # Debug = True
+    Debug = False
+    # Ensure the below line is set to the region where your elastic beanstalk is set up
+    ALLOWED_HOSTS = ['.ap-southeast-2.elasticbeanstalk.com']
+else:
+    # SECURITY WARNING: don't run with debug turned on in production!
+    # We need this to work in development environment but not on testing or production environments
+    # We do not want to reveal errors in our server-side to the public in case if that happens
+    DEBUG = True
+    ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -133,3 +140,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+if 'S3_BUCKET' in os.environ:
+    AWS_STORAGE_BUCKET_NAME = 'ana-crud-bucket-204'
+    AWS_S3_REGION_NAME = 'us-west-2'
+
